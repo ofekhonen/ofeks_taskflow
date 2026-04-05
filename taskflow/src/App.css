@@ -1,0 +1,291 @@
+/* -------------------------------
+   רקע כללי עם גרדיאנט
+---------------------------------*/
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #e2e8f0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* -------------------------------
+   קונטיינר מרכזי
+---------------------------------*/
+.app-container {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* -------------------------------
+   כותרת
+---------------------------------*/
+h1 {
+  font-size: 36px;
+  color: #3b82f6;
+  text-shadow: 0 0 12px #3b82f6aa;
+  margin-bottom: 24px;
+}
+
+/* -------------------------------
+   טופס יצירת משימה
+---------------------------------*/
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.create-form input {
+  padding: 12px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(59,130,246,0.4);
+  background: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  font-size: 16px;
+}
+
+.create-form button {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-form button:hover {
+  transform: scale(1.02);
+  background-color: #2563eb;
+}
+
+.create-form button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* -------------------------------
+   רשימת משימות כגריד אופקי
+---------------------------------*/
+/* השתמשתי ב-flex עם flex-wrap כדי שכל המשימות יתפרסו אופקית */
+.task-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* רווח בין הכרטיסים */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* -------------------------------
+   כרטיס משימה
+---------------------------------*/
+.task-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(15,23,42,0.7);
+  backdrop-filter: blur(12px);
+  border: 3px solid;
+  border-image-slice: 1;
+  border-width: 3px;
+  border-image-source: linear-gradient(45deg, #3b82f6, #f472b6);
+  box-sizing: border-box;
+  flex: 1 1 250px; /* תיקון: גודל מינימום 250px, יתפוס מקום לפי הרוחב */
+  max-width: 300px; /* אפשרי להגבלת רוחב */
+  transition: all 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.task-item:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 0 20px #3b82f6aa, 0 0 10px #f472b6aa;
+}
+
+/* -------------------------------
+   header של כרטיס - checkbox + כותרת
+---------------------------------*/
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  flex-direction: row-reverse; /* הצ'קבוקס לימין */
+}
+
+.task-header input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #3b82f6;
+}
+
+.task-header span {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  direction: ltr;
+  text-align: left;
+}
+
+.task-header span.completed {
+  text-decoration: line-through;
+  color: #22c55e; /* ירוק כאשר Completed */
+}
+
+/* -------------------------------
+   תיאור משימה
+---------------------------------*/
+.task-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  width: 100%;
+  direction: ltr;
+  text-align: left;
+}
+
+/* -------------------------------
+   Inputs בעריכה
+---------------------------------*/
+.task-item input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(59,130,246,0.5);
+  background-color: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.task-item input[type="text"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 10px #3b82f633;
+}
+
+/* -------------------------------
+   כפתורים (Edit / Delete / Save / Cancel)
+---------------------------------*/
+.task-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* כל הכפתורים כחולים כברירת מחדל */
+.task-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #3b82f6; /* תיקון: כחול לכל הכפתורים */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-actions button:hover {
+  transform: scale(1.02);
+  background-color: #2563eb; /* שינוי hover לגוון כחול כהה */
+}
+
+.task-actions button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* -------------------------------
+   תאריך יצירה
+---------------------------------*/
+.task-date {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  border-top: 1px solid rgba(59,130,246,0.2);
+  padding-top: 4px;
+  width: 100%;
+  text-align: right;
+  font-family: "Courier New", monospace;
+}
+
+/* -------------------------------
+   כפתור אחיד לכל הכפתורים
+---------------------------------*/
+button {
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+}
+
+button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 0 10px #3b82f6aa;
+}
+
+.task-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* מרכז את כל הכרטיסים אופקית */
+  align-items: flex-start; /* אפשר לשנות ל-center אם רוצים גם אנכי */
+  gap: 20px; /* רווח בין הכרטיסים */
+  padding: 0;
+  margin: 0 auto; /* מרכז את הרשימה בתוך הקונטיינר */
+  list-style: none;
+}
+
+.task-item:hover {
+  
+  box-shadow: 0 0 25px #3b82f6aa, 0 0 15px #f472b6aa;
+}
+
+button[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.spinner {
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
