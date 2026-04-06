@@ -125,6 +125,13 @@ export default function TaskItem({
         </p>
       )}
 
+      {/* תאריך עדכון */}
+      {task.updatedAt && (
+        <p className="task-updated">
+          Last updated: {new Date(task.updatedAt).toLocaleString()}
+        </p>
+      )}
+
       {/* שגיאה אם קיימת */}
       {isError && <p style={{ color: "red" }}>Error!</p>}
 

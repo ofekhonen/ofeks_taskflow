@@ -16,13 +16,14 @@ body {
   margin: 60px auto;
   padding: 20px;
   text-align: center;
+  border: none;
 }
 
 /* -------------------------------
    כותרת
 ---------------------------------*/
 h1 {
-  font-size: 36px;
+  font-size: 45px;
   color: #3b82f6;
   text-shadow: 0 0 12px #3b82f6aa;
   margin-bottom: 24px;
@@ -72,18 +73,18 @@ h1 {
    רשימת משימות כגריד אופקי
 ---------------------------------*/
 /* השתמשתי ב-flex עם flex-wrap כדי שכל המשימות יתפרסו אופקית */
+/* רשימת משימות */
 .task-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* רווח בין הכרטיסים */
+  flex-wrap: wrap;        /* מאפשר שורות נוספות */
+  gap: 20px;              /* רווח בין הכרטיסים */
   padding: 0;
   margin: 0;
   list-style: none;
+  justify-content: flex-start;
 }
 
-/* -------------------------------
-   כרטיס משימה
----------------------------------*/
+/* כרטיס משימה */
 .task-item {
   display: flex;
   flex-direction: column;
@@ -97,11 +98,24 @@ h1 {
   border-width: 3px;
   border-image-source: linear-gradient(45deg, #3b82f6, #f472b6);
   box-sizing: border-box;
-  flex: 1 1 250px; /* תיקון: גודל מינימום 250px, יתפוס מקום לפי הרוחב */
-  max-width: 300px; /* אפשרי להגבלת רוחב */
+  flex: 1 1 200px;   /* מינימום 200px, יתפוס מקום לפי הרוחב */
+  max-width: 1fr;    /* מאפשר יותר טורים */
   transition: all 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   opacity: 0;
   animation: fadeIn 0.5s forwards;
+}
+
+/* רספונסיביות למסכים קטנים */
+@media (max-width: 900px) {
+  .task-item {
+    flex: 1 1 45%;  /* שני טורים ברוחב בינוני */
+  }
+}
+
+@media (max-width: 600px) {
+  .task-item {
+    flex: 1 1 100%; /* טור אחד בטלפונים */
+  }
 }
 
 @keyframes fadeIn {
@@ -134,7 +148,7 @@ h1 {
 
 .task-header span {
   flex: 1;
-  font-size: 16px;
+  font-size: 23px;
   font-weight: 600;
   direction: ltr;
   text-align: left;
@@ -288,4 +302,129 @@ button[data-tooltip]:hover::after {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+}
+
+.modal-buttons {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 25px 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(15, 23, 42, 0.7);
+  color: #e2e8f0;
+  font-size: 16px;
+
+  outline: none;
+  transition: all 0.25s ease;
+
+  backdrop-filter: blur(8px);
+}
+
+/* placeholder */
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+/* כשנכנסים לשדה */
+.search-input:focus {
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* hover קטן */
+.search-input:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.search-input {
+  width: 100%;
+  display: block;
+  margin: 25px 0;
+
+  box-sizing: border-box; /* 🔥 זה הכי חשוב */
+
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(15, 23, 42, 0.7);
+  color: #e2e8f0;
+  font-size: 16px;
+
+  outline: none;
+}
+
+.fab-btn {
+  position: fixed; /* נשאר במקום גם כשגוללים */
+  top: 20px;       /* 20px מהחלק העליון */
+  right: 20px;     /* 20px מהצד הימני */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;   /* עגול */
+  background-color: #3b82f6;
+  color: white;
+  font-size: 30px;      /* תו + גדול */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: 0.2s;
+  z-index: 100;
+}
+
+.fab-btn:hover {
+  background-color: #2563eb;
+  transform: scale(1.1); /* אפקט קליק יפה */
+}
+
+.modal h2 {
+  color: #3b82f6;
+  text-shadow: 0 0 12px #3b82f6aa;
+  font-size: 24px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
+.task-updated {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #94a3b8;
+  border-top: 1px solid rgba(59,130,246,0.2);
+  padding-top: 4px;
+  width: 100%;
+  text-align: left;          /* שונה מ־task-date ל־LEFT */
+  font-family: "Courier New", monospace;
 }
