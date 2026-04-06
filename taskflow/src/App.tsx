@@ -1,63 +1,63 @@
-// מביאים את useState ו־useEffect מ־React
+// Import useState and useEffect from React
 import { useState, useEffect } from "react"
 
-// מביאים את קומפוננטת TaskList מהתיקייה components
+// Import TaskList component from components folder
 import TaskList from "./components/TaskList"
 
-// מביאים את קובץ העיצוב
+// Import CSS styles
 import "./App.css"
 
-// מגדירים טיפוס Task עבור TypeScript
-// מכיל את כל השדות שה־DB מחזיר
+// Define Task type for TypeScript
+// Represents the structure returned from the database
 export type Task = {
-  id: number             // מזהה ייחודי לכל משימה
-  title: string          // כותרת המשימה
-  completed: boolean     // האם המשימה הושלמה
-  createdAt: string      // תאריך יצירת המשימה
-  description?: string   // תיאור המשימה אופציונלי
-  updatedAt?: string
+  id: number             // Unique ID for each task
+  title: string          // Task title
+  completed: boolean     // Whether the task is completed
+  createdAt: string      // Creation date of the task
+  description?: string   // Optional task description
+  updatedAt?: string     // Optional last update date
 }
 
-// קומפוננטת App הראשית
+// Main App component
 function App() {
 
-  // state לרשימת המשימות
+  // State for storing all tasks
   const [tasks, setTasks] = useState<Task[]>([])
 
-  // state שמייצג האם אנחנו באמצע טעינה
+  // State to track loading status
   const [isLoading, setIsLoading] = useState(true)
 
-  // state ליצירת משימה חדשה
-  const [newTitle, setNewTitle] = useState("")
-  const [newDescription, setNewDescription] = useState("")
-  const [createLoading, setCreateLoading] = useState(false)
+  // State for creating a new task
+  const [newTitle, setNewTitle] = useState("") // New task title
+  const [newDescription, setNewDescription] = useState("") // New task description
+  const [createLoading, setCreateLoading] = useState(false) // Loading state while creating
 
-  //delte task confirmation window
+  // State for delete confirmation modal (stores task ID or null)
   const [taskToDelete, setTaskToDelete] = useState<number | null>(null)
 
-  //search for relavent tasks
-  const [searchTerm, setSearchTerm] = useState("");
+  // State for search input
+  const [searchTerm, setSearchTerm] = useState("")
 
+  // Filter tasks based on search term (title or description)
   const filteredTasks = tasks.filter(task =>
-    task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (task.description?.toLowerCase().includes(searchTerm.toLowerCase()))
+    task.title.toLowerCase().includes(searchTerm.toLowerCase()) || // Match title
+    (task.description?.toLowerCase().includes(searchTerm.toLowerCase())) // Match description if exists
   )
 
-
-  //creating new task button 
+  // State to control "Create Task" modal visibility
   const [showCreateModal, setShowCreateModal] = useState(false)
 
-  
-  // useEffect – רץ פעם אחת כשהקומפוננטה נטענת
+  // useEffect runs once when component mounts
   useEffect(() => {
+    // Function to fetch tasks from backend
     const fetchTasks = async () => {
       try {
-        setIsLoading(true)
+        setIsLoading(true) // Start loading
 
-        const response = await fetch("http://localhost:3000/tasks")
-        const data = await response.json()
+        const response = await fetch("http://localhost:3000/tasks") // API call
+        const data = await response.json() // Convert response to JSON
 
-        // ממפה את הנתונים כדי להתאים ל־type Task שלנו
+        // Map backend data to match Task type
         const mappedTasks: Task[] = data.map((task: any) => ({
           id: task.id,
           title: task.title,
@@ -66,97 +66,105 @@ function App() {
           description: task.description
         }))
 
-        setTasks(mappedTasks)
-        console.log(mappedTasks)
+        setTasks(mappedTasks) // Save tasks to state
+        console.log(mappedTasks) // Debug log
 
       } catch (error) {
-        console.log("Error fetching tasks:", error)
+        console.log("Error fetching tasks:", error) // Error handling
       } finally {
-        setIsLoading(false)
+        setIsLoading(false) // Stop loading regardless of success/failure
       }
     }
 
-    fetchTasks()
-  }, [])
+    fetchTasks() // Call function
+  }, []) // Empty dependency array = runs once
 
-  // פונקציה ליצירת משימה חדשה
+  // Function to create a new task
   const handleCreateTask = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newTitle) return
+    e.preventDefault() // Prevent page reload
+    if (!newTitle) return // Don't create if title is empty
 
     try {
-      setCreateLoading(true)
+      setCreateLoading(true) // Start loading
 
       const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", // HTTP POST request
+        headers: { "Content-Type": "application/json" }, // Send JSON
         body: JSON.stringify({
           title: newTitle,
-          description: newDescription || "" // שומר על string אם undefined
+          description: newDescription || "" // Ensure it's always a string
         })
       })
 
-      const newTask = await response.json()
-      setTasks(prev => [newTask, ...prev])
+      const newTask = await response.json() // Get created task from server
+      setTasks(prev => [newTask, ...prev]) // Add new task at top
 
-      setNewTitle("")
-      setNewDescription("")
+      setNewTitle("") // Reset input
+      setNewDescription("") // Reset input
 
     } catch (error) {
       console.log("Error creating task:", error)
     } finally {
-      setCreateLoading(false)
+      setCreateLoading(false) // Stop loading
     }
   }
 
-
-  // פונקציה לשינוי מצב completed
+  // Function to toggle task completion
   const toggleTask = (id: number) => {
     setTasks(prev => {
       const updated = prev.map(task =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+        task.id === id 
+          ? { ...task, completed: !task.completed } // Toggle completed
+          : task
       )
     
+      // Sort: incomplete tasks first
       return updated.sort((a, b) => Number(a.completed) - Number(b.completed))
     })
   }
 
-  // פונקציה למחיקת משימה
+  // Function to trigger delete confirmation
   const deleteTask = (id: number) => {
-    setTaskToDelete(id)
+    setTaskToDelete(id) // Open modal with selected task ID
   }
 
-  //delte task confirmation window
-
+  // Function to confirm deletion
   const confirmDelete = async () => {
-    if (taskToDelete === null) return
+    if (taskToDelete === null) return // Safety check
   
     try {
       await fetch(`http://localhost:3000/tasks/${taskToDelete}`, {
-        method: "DELETE"
+        method: "DELETE" // Send DELETE request
       })
   
+      // Remove task from UI
       setTasks(prev => prev.filter(task => task.id !== taskToDelete))
     } catch (error) {
       console.log("Error deleting task:", error)
     } finally {
-      setTaskToDelete(null)
+      setTaskToDelete(null) // Close modal
     }
   }
 
-
-  // פונקציה לעדכון משימה
+  // Function to update a task
   const updateTask = async (id: number, title: string, description?: string) => {
     try {
       const response = await fetch(`http://localhost:3000/tasks/${id}`, {
-        method: "PUT",
+        method: "PUT", // Update request
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description: description || "" })
+        body: JSON.stringify({ 
+          title, 
+          description: description || "" // Ensure string
+        })
       })
 
       const updatedTask = await response.json()
+
+      // Update task in state
       setTasks(prev => prev.map(task =>
-        task.id === id ? { ...updatedTask, updatedAt: new Date().toISOString() } : task
+        task.id === id 
+          ? { ...updatedTask, updatedAt: new Date().toISOString() } // Add updated timestamp
+          : task
       ))
 
     } catch (error) {
@@ -164,54 +172,57 @@ function App() {
     }
   }
 
-  // מה שמוצג על המסך
+  // Render UI
   return (
     <div className="app-container">
 
-      {/* כותרת ראשית */}
+      {/* Main title */}
       <h1>TaskFlow</h1>
 
+      {/* Floating add button */}
       <button 
         className="fab-btn"
-        onClick={() => setShowCreateModal(true)}
+        onClick={() => setShowCreateModal(true)} // Open modal
       >
         +
       </button>
 
-       {/*search tasks*/}
+      {/* Search input */}
       <input
         type="text"
         placeholder="Search tasks..."
         value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={(e) => setSearchTerm(e.target.value)} // Update search
         className="search-input"
       />
 
-      {/* רינדור לפי מצב טעינה */}
+      {/* Conditional rendering based on loading */}
       {isLoading ? (
         <p>Loading...</p>
       ) : (
         <TaskList
-          tasks={filteredTasks}
-          onToggle={toggleTask}
-          onDelete={deleteTask}
-          onUpdate={updateTask}
+          tasks={filteredTasks} // Pass filtered tasks
+          onToggle={toggleTask} // Toggle handler
+          onDelete={deleteTask} // Delete handler
+          onUpdate={updateTask} // Update handler
         />
       )}
 
-
-      {/*add task button*/}
-
+      {/* Create task modal */}
       {showCreateModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>Create New Task</h2>
 
-            <form onSubmit={(e) => {
-              handleCreateTask(e)
-              setShowCreateModal(false)
-            }} className="create-form">
+            <form 
+              onSubmit={(e) => {
+                handleCreateTask(e) // Create task
+                setShowCreateModal(false) // Close modal
+              }} 
+              className="create-form"
+            >
 
+              {/* Title input */}
               <input
                 type="text"
                 placeholder="New task title"
@@ -219,6 +230,7 @@ function App() {
                 onChange={e => setNewTitle(e.target.value)}
               />
 
+              {/* Description input */}
               <input
                 type="text"
                 placeholder="Description (optional)"
@@ -226,12 +238,16 @@ function App() {
                 onChange={e => setNewDescription(e.target.value)}
               />
 
+              {/* Modal buttons */}
               <div className="modal-buttons">
                 <button type="submit" disabled={createLoading}>
                   {createLoading ? "Creating..." : "Add Task"}
                 </button>
 
-                <button type="button" onClick={() => setShowCreateModal(false)}>
+                <button 
+                  type="button" 
+                  onClick={() => setShowCreateModal(false)} // Close modal
+                >
                   Cancel
                 </button>
               </div>
@@ -240,24 +256,23 @@ function App() {
           </div>
         </div>
       )}
-      
 
+      {/* Delete confirmation modal */}
+      {taskToDelete !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to delete this task?</p>
 
-    {taskToDelete !== null && (
-      <div className="modal-overlay">
-        <div className="modal">
-          <p>Are you sure you want to delete this task?</p>
-
-          <div className="modal-buttons">
-            <button onClick={confirmDelete}>Yes</button>
-            <button onClick={() => setTaskToDelete(null)}>Cancel</button>
+            <div className="modal-buttons">
+              <button onClick={confirmDelete}>Yes</button>
+              <button onClick={() => setTaskToDelete(null)}>Cancel</button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
     </div>
   )
 }
 
-export default App
+export default App // Export App component

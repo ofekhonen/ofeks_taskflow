@@ -1,43 +1,43 @@
-// מביאים את קומפוננטת TaskItem
+// Import TaskItem component
 import TaskItem from "./TaskItem"
 
-// מביאים את הטיפוס Task
+// Import Task type from App file
 import type { Task } from "../App"
 
-// Props שמגיעים מהקומפוננטה App
+// Props received from App component
 type Props = {
-  tasks: Task[] // רשימת המשימות
-  onToggle: (id: number) => void // שינוי מצב completed
-  onDelete: (id: number) => void // מחיקת משימה
-  onUpdate: (id: number, title: string, description?: string) => void // עדכון משימה (description אופציונלי)
+  tasks: Task[] // Array of all tasks
+  onToggle: (id: number) => void // Function to toggle completed state
+  onDelete: (id: number) => void // Function to delete a task
+  onUpdate: (id: number, title: string, description?: string) => void // Function to update a task (description optional)
 }
 
-// קומפוננטה שמציגה את כל המשימות
+// Component that renders all tasks
 export default function TaskList({ tasks, onToggle, onDelete, onUpdate }: Props) {
   return (
-    <div className="task-list">
+    <div className="task-list"> {/* Container for all task items */}
 
-      {/* עוברים על כל המשימות עם map */}
+      {/* Loop through tasks using map */}
       {tasks.map(task => (
 
         <TaskItem
-          key={task.id} // חשוב ל־React כדי לזהות כל אלמנט
+          key={task.id} // Unique key required by React for list rendering
 
-          task={task} // המשימה עצמה
+          task={task} // Pass the task object to TaskItem
 
-          // פונקציה לשינוי completed
+          // Handle toggle (wrap with arrow function to pass id)
           onToggle={() => onToggle(task.id)}
 
-          // פונקציה למחיקה
+          // Handle delete
           onDelete={() => onDelete(task.id)}
 
-          // פונקציה לעדכון
+          // Handle update (pass new values + current task id)
           onUpdate={(title, description) =>
             onUpdate(task.id, title, description)
           }
 
-          isLoading={false} // אפשר להרחיב בעתיד
-          isError={false}   // אפשר להרחיב בעתיד
+          isLoading={false} // Placeholder for future loading state
+          isError={false}   // Placeholder for future error state
         />
 
       ))}

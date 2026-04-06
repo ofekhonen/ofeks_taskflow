@@ -1,149 +1,150 @@
 /* -------------------------------
-   רקע כללי עם גרדיאנט
+   Global background with gradient
 ---------------------------------*/
 body {
-  margin: 0;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e2e8f0;
-  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0; /* Remove default browser margin */
+  background: radial-gradient(circle at top, #0f172a, #020617); /* Dark gradient background */
+  color: #e2e8f0; /* Default text color */
+  font-family: "Segoe UI", Arial, sans-serif; /* Main font */
 }
 
 /* -------------------------------
-   קונטיינר מרכזי
+   Main container
 ---------------------------------*/
 .app-container {
-  max-width: 700px;
-  margin: 60px auto;
-  padding: 20px;
-  text-align: center;
-  border: none;
+  max-width: 700px; /* Limit width */
+  margin: 60px auto; /* Center horizontally + top spacing */
+  padding: 20px; /* Inner spacing */
+  text-align: center; /* Center text */
+  border: none; /* No border */
 }
 
 /* -------------------------------
-   כותרת
+   Title
 ---------------------------------*/
 h1 {
-  font-size: 45px;
-  color: #3b82f6;
-  text-shadow: 0 0 12px #3b82f6aa;
-  margin-bottom: 24px;
+  font-size: 45px; /* Large title */
+  color: #3b82f6; /* Blue color */
+  text-shadow: 0 0 12px #3b82f6aa; /* Glow effect */
+  margin-bottom: 24px; /* Space below */
 }
 
 /* -------------------------------
-   טופס יצירת משימה
+   Create task form
 ---------------------------------*/
 .create-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 30px;
+  display: flex; /* Flex layout */
+  flex-direction: column; /* Stack vertically */
+  gap: 12px; /* Space between inputs */
+  margin-bottom: 30px; /* Space below form */
 }
 
 .create-form input {
-  padding: 12px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(59,130,246,0.4);
-  background: rgba(15,23,42,0.7);
-  color: #e2e8f0;
-  font-size: 16px;
+  padding: 12px 10px; /* Inner spacing */
+  border-radius: 8px; /* Rounded corners */
+  border: 1px solid rgba(59,130,246,0.4); /* Light blue border */
+  background: rgba(15,23,42,0.7); /* Dark semi-transparent background */
+  color: #e2e8f0; /* Text color */
+  font-size: 16px; /* Text size */
 }
 
 .create-form button {
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 12px; /* Inner spacing */
+  border-radius: 8px; /* Rounded */
+  border: none; /* Remove border */
+  background-color: #3b82f6; /* Blue button */
+  color: white; /* Text color */
+  font-weight: bold; /* Bold text */
+  cursor: pointer; /* Pointer cursor */
+  transition: all 0.2s ease; /* Smooth animation */
 }
 
 .create-form button:hover {
-  transform: scale(1.02);
-  background-color: #2563eb;
+  transform: scale(1.02); /* Slight zoom */
+  background-color: #2563eb; /* Darker blue */
 }
 
 .create-form button:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
+  background-color: #94a3b8; /* Gray when disabled */
+  cursor: not-allowed; /* Disabled cursor */
 }
 
 /* -------------------------------
-   רשימת משימות כגריד אופקי
+   Task list (flex grid)
 ---------------------------------*/
-/* השתמשתי ב-flex עם flex-wrap כדי שכל המשימות יתפרסו אופקית */
-/* רשימת משימות */
 .task-list {
-  display: flex;
-  flex-wrap: wrap;        /* מאפשר שורות נוספות */
-  gap: 20px;              /* רווח בין הכרטיסים */
+  display: flex; /* Flex layout */
+  flex-wrap: wrap; /* Allow multiple rows */
+  gap: 20px; /* Space between cards */
   padding: 0;
   margin: 0;
-  list-style: none;
-  justify-content: flex-start;
+  list-style: none; /* Remove bullets */
+  justify-content: flex-start; /* Align left */
 }
 
-/* כרטיס משימה */
+/* Task card */
 .task-item {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: column; /* Vertical layout */
+  align-items: flex-start; /* Align left */
   padding: 16px;
   border-radius: 12px;
   background: rgba(15,23,42,0.7);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px); /* Glass effect */
   border: 3px solid;
   border-image-slice: 1;
   border-width: 3px;
-  border-image-source: linear-gradient(45deg, #3b82f6, #f472b6);
+  border-image-source: linear-gradient(45deg, #3b82f6, #f472b6); /* Gradient border */
   box-sizing: border-box;
-  flex: 1 1 200px;   /* מינימום 200px, יתפוס מקום לפי הרוחב */
-  max-width: 1fr;    /* מאפשר יותר טורים */
+  flex: 1 1 200px; /* Responsive width */
+  max-width: 1fr;
   transition: all 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
+  opacity: 0; /* Start hidden */
+  animation: fadeIn 0.5s forwards; /* Fade animation */
 }
 
-/* רספונסיביות למסכים קטנים */
+/* Responsive - tablet */
 @media (max-width: 900px) {
   .task-item {
-    flex: 1 1 45%;  /* שני טורים ברוחב בינוני */
+    flex: 1 1 45%; /* Two columns */
   }
 }
 
+/* Responsive - mobile */
 @media (max-width: 600px) {
   .task-item {
-    flex: 1 1 100%; /* טור אחד בטלפונים */
+    flex: 1 1 100%; /* One column */
   }
 }
 
+/* Fade animation */
 @keyframes fadeIn {
   to {
     opacity: 1;
   }
 }
 
+/* Hover effect */
 .task-item:hover {
-  transform: translateY(-3px) scale(1.03);
+  transform: translateY(-3px) scale(1.03); /* Lift + zoom */
   box-shadow: 0 0 20px #3b82f6aa, 0 0 10px #f472b6aa;
 }
 
 /* -------------------------------
-   header של כרטיס - checkbox + כותרת
+   Task header (checkbox + title)
 ---------------------------------*/
 .task-header {
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
-  flex-direction: row-reverse; /* הצ'קבוקס לימין */
+  flex-direction: row-reverse; /* Checkbox on right */
 }
 
 .task-header input[type="checkbox"] {
   width: 22px;
   height: 22px;
-  accent-color: #3b82f6;
+  accent-color: #3b82f6; /* Blue checkbox */
 }
 
 .task-header span {
@@ -155,12 +156,12 @@ h1 {
 }
 
 .task-header span.completed {
-  text-decoration: line-through;
-  color: #22c55e; /* ירוק כאשר Completed */
+  text-decoration: line-through; /* Strike-through */
+  color: #22c55e; /* Green when completed */
 }
 
 /* -------------------------------
-   תיאור משימה
+   Task description
 ---------------------------------*/
 .task-description {
   margin-top: 8px;
@@ -173,7 +174,7 @@ h1 {
 }
 
 /* -------------------------------
-   Inputs בעריכה
+   Edit inputs
 ---------------------------------*/
 .task-item input[type="text"] {
   width: 100%;
@@ -195,7 +196,7 @@ h1 {
 }
 
 /* -------------------------------
-   כפתורים (Edit / Delete / Save / Cancel)
+   Task buttons
 ---------------------------------*/
 .task-actions {
   display: flex;
@@ -203,13 +204,12 @@ h1 {
   margin-top: 10px;
 }
 
-/* כל הכפתורים כחולים כברירת מחדל */
 .task-actions button {
   flex: 1;
   padding: 10px;
   border-radius: 8px;
   border: none;
-  background-color: #3b82f6; /* תיקון: כחול לכל הכפתורים */
+  background-color: #3b82f6;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -218,7 +218,7 @@ h1 {
 
 .task-actions button:hover {
   transform: scale(1.02);
-  background-color: #2563eb; /* שינוי hover לגוון כחול כהה */
+  background-color: #2563eb;
 }
 
 .task-actions button:disabled {
@@ -227,7 +227,7 @@ h1 {
 }
 
 /* -------------------------------
-   תאריך יצירה
+   Created date
 ---------------------------------*/
 .task-date {
   margin-top: 8px;
@@ -241,7 +241,7 @@ h1 {
 }
 
 /* -------------------------------
-   כפתור אחיד לכל הכפתורים
+   Global button style
 ---------------------------------*/
 button {
   border-radius: 8px;
@@ -250,7 +250,6 @@ button {
   transition: all 0.2s ease;
   background-color: #3b82f6;
   color: white;
-  font-weight: bold;
 }
 
 button:hover {
@@ -258,22 +257,19 @@ button:hover {
   box-shadow: 0 0 10px #3b82f6aa;
 }
 
+/* Center task list */
 .task-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* מרכז את כל הכרטיסים אופקית */
-  align-items: flex-start; /* אפשר לשנות ל-center אם רוצים גם אנכי */
-  gap: 20px; /* רווח בין הכרטיסים */
-  padding: 0;
-  margin: 0 auto; /* מרכז את הרשימה בתוך הקונטיינר */
-  list-style: none;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
 }
 
+/* Stronger hover */
 .task-item:hover {
-  
   box-shadow: 0 0 25px #3b82f6aa, 0 0 15px #f472b6aa;
 }
 
+/* Tooltip on hover */
 button[data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -288,6 +284,7 @@ button[data-tooltip]:hover::after {
   white-space: nowrap;
 }
 
+/* Loading spinner */
 .spinner {
   border: 2px solid rgba(255,255,255,0.3);
   border-top: 2px solid #fff;
@@ -299,11 +296,13 @@ button[data-tooltip]:hover::after {
   margin-left: 6px;
 }
 
+/* Spinner animation */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
+/* Modal overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -317,6 +316,7 @@ button[data-tooltip]:hover::after {
   justify-content: center;
 }
 
+/* Modal box */
 .modal {
   background: #1e293b;
   padding: 20px;
@@ -325,6 +325,7 @@ button[data-tooltip]:hover::after {
   color: white;
 }
 
+/* Modal buttons */
 .modal-buttons {
   margin-top: 15px;
   display: flex;
@@ -332,68 +333,32 @@ button[data-tooltip]:hover::after {
   justify-content: center;
 }
 
-.search-input {
-  width: 100%;
-  padding: 14px 16px;
-  margin: 25px 0;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  background: rgba(15, 23, 42, 0.7);
-  color: #e2e8f0;
-  font-size: 16px;
-
-  outline: none;
-  transition: all 0.25s ease;
-
-  backdrop-filter: blur(8px);
-}
-
-/* placeholder */
-.search-input::placeholder {
-  color: #94a3b8;
-}
-
-/* כשנכנסים לשדה */
-.search-input:focus {
-  border: 1px solid #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
-  background: rgba(15, 23, 42, 0.9);
-}
-
-/* hover קטן */
-.search-input:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-}
-
+/* Search input */
 .search-input {
   width: 100%;
   display: block;
   margin: 25px 0;
-
-  box-sizing: border-box; /* 🔥 זה הכי חשוב */
-
+  box-sizing: border-box; /* Prevent overflow */
   padding: 14px 16px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   background: rgba(15, 23, 42, 0.7);
   color: #e2e8f0;
   font-size: 16px;
-
   outline: none;
 }
 
+/* Floating action button */
 .fab-btn {
-  position: fixed; /* נשאר במקום גם כשגוללים */
-  top: 20px;       /* 20px מהחלק העליון */
-  right: 20px;     /* 20px מהצד הימני */
+  position: fixed;
+  top: 20px;
+  right: 20px;
   width: 60px;
   height: 60px;
-  border-radius: 50%;   /* עגול */
+  border-radius: 50%;
   background-color: #3b82f6;
   color: white;
-  font-size: 30px;      /* תו + גדול */
+  font-size: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -406,9 +371,10 @@ button[data-tooltip]:hover::after {
 
 .fab-btn:hover {
   background-color: #2563eb;
-  transform: scale(1.1); /* אפקט קליק יפה */
+  transform: scale(1.1);
 }
 
+/* Modal title */
 .modal h2 {
   color: #3b82f6;
   text-shadow: 0 0 12px #3b82f6aa;
@@ -417,7 +383,7 @@ button[data-tooltip]:hover::after {
   text-align: center;
 }
 
-
+/* Updated date */
 .task-updated {
   margin-top: 8px;
   font-size: 12px;
@@ -425,6 +391,6 @@ button[data-tooltip]:hover::after {
   border-top: 1px solid rgba(59,130,246,0.2);
   padding-top: 4px;
   width: 100%;
-  text-align: left;          /* שונה מ־task-date ל־LEFT */
+  text-align: left; /* Different from task-date */
   font-family: "Courier New", monospace;
 }

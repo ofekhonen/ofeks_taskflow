@@ -1,20 +1,20 @@
-// מביאים useState לניהול state פנימי
+// Import useState for managing internal component state
 import { useState } from "react"
 
-// מביאים את הטיפוס Task
+// Import Task type
 import type { Task } from "../App"
 
-// Props של הקומפוננטה
+// Component props
 type Props = {
-  task: Task // המשימה עצמה
-  onToggle: () => void // שינוי completed
-  onDelete: () => void // מחיקה
-  onUpdate: (title: string, description?: string) => void // עדכון (description אופציונלי)
-  isLoading: boolean // מצב טעינה
-  isError: boolean // מצב שגיאה
+  task: Task // The task object
+  onToggle: () => void // Toggle completed state
+  onDelete: () => void // Delete task
+  onUpdate: (title: string, description?: string) => void // Update task (description optional)
+  isLoading: boolean // Loading state (e.g. saving/deleting)
+  isError: boolean // Error state
 }
 
-// קומפוננטה שמציגה משימה בודדת
+// Component that represents a single task
 export default function TaskItem({
   task,
   onToggle,
@@ -24,33 +24,33 @@ export default function TaskItem({
   isError
 }: Props) {
 
-  // state שמנהל אם אנחנו במצב עריכה או לא
+  // State to track if the task is in edit mode
   const [isEditing, setIsEditing] = useState(false)
 
-  // state לשדות עריכה
+  // State for editable fields (initialized with current task values)
   const [editTitle, setEditTitle] = useState(task.title)
   const [editDescription, setEditDescription] = useState(task.description || "")
 
-  // פונקציה לשמירת עריכה
+  // Function to save changes
   const handleSave = () => {
-    onUpdate(editTitle, editDescription) // שולח את הערכים החדשים להורה
-    setIsEditing(false) // יוצא ממצב עריכה
+    onUpdate(editTitle, editDescription) // Send updated values to parent component
+    setIsEditing(false) // Exit edit mode
   }
 
   return (
-    <div className="task-item">
+    <div className="task-item"> {/* Main container for the task */}
 
-      {/* header - checkbox + title */}
+      {/* Header section: checkbox + title */}
       <div className="task-header">
 
-        {/* checkbox לשליטה ב־completed */}
+        {/* Checkbox to control completed state */}
         <input
           type="checkbox"
-          checked={task.completed}
-          onChange={onToggle}
+          checked={task.completed} // Controlled input
+          onChange={onToggle} // Toggle handler
         />
 
-        {/* אם המשימה הושלמה → מוסיפים class שמוסיף קו */}
+        {/* Task title (with conditional class if completed) */}
         <span className={task.completed ? "completed" : ""}>
           {task.title}
         </span>
@@ -59,31 +59,31 @@ export default function TaskItem({
 
       {isEditing ? (
         <>
-          {/* מצב עריכה */}
+          {/* EDIT MODE */}
 
-          {/* אינפוט לכותרת */}
+          {/* Input for editing title */}
           <input
             type="text"
-            value={editTitle}
-            onChange={e => setEditTitle(e.target.value)}
+            value={editTitle} // Controlled input
+            onChange={e => setEditTitle(e.target.value)} // Update state on change
           />
 
-          {/* אינפוט לתיאור */}
+          {/* Input for editing description */}
           <input
             type="text"
             value={editDescription}
             onChange={e => setEditDescription(e.target.value)}
           />
 
-          {/* כפתורים */}
+          {/* Action buttons */}
           <div className="task-actions">
 
-            {/* שמירה */}
+            {/* Save button */}
             <button onClick={handleSave} disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save"}
+              {isLoading ? "Saving..." : "Save"} {/* Show loading text if needed */}
             </button>
 
-            {/* ביטול */}
+            {/* Cancel editing */}
             <button onClick={() => setIsEditing(false)}>
               Cancel
             </button>
@@ -92,24 +92,24 @@ export default function TaskItem({
         </>
       ) : (
         <>
-          {/* מצב רגיל */}
+          {/* VIEW MODE */}
 
-          {/* תיאור המשימה */}
+          {/* Task description (only if exists) */}
           {task.description && (
             <p className="task-description">
               {task.description}
             </p>
           )}
 
-          {/* כפתורים */}
+          {/* Action buttons */}
           <div className="task-actions">
 
-            {/* מעבר לעריכה */}
+            {/* Enter edit mode */}
             <button onClick={() => setIsEditing(true)}>
               Edit
             </button>
 
-            {/* מחיקה */}
+            {/* Delete button */}
             <button onClick={onDelete} disabled={isLoading}>
               {isLoading ? "Deleting..." : "Delete"}
             </button>
@@ -118,21 +118,21 @@ export default function TaskItem({
         </>
       )}
 
-      {/* תאריך יצירה */}
+      {/* Created date */}
       {task.createdAt && (
         <p className="task-date">
-          {new Date(task.createdAt).toLocaleString()}
+          {new Date(task.createdAt).toLocaleString()} {/* Format date */}
         </p>
       )}
 
-      {/* תאריך עדכון */}
+      {/* Updated date */}
       {task.updatedAt && (
         <p className="task-updated">
           Last updated: {new Date(task.updatedAt).toLocaleString()}
         </p>
       )}
 
-      {/* שגיאה אם קיימת */}
+      {/* Error message */}
       {isError && <p style={{ color: "red" }}>Error!</p>}
 
     </div>
