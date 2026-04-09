@@ -2,7 +2,7 @@
 import { useState } from "react"
 
 // Import Task type
-import type { Task } from "../App"
+import type { Task } from "../types/Task"
 
 // Component props
 type Props = {
