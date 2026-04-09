@@ -1,47 +1,30 @@
-// מביאים את קומפוננטת TaskItem
 import TaskItem from "./TaskItem"
+import type { Task } from "../types/Task"
 
-// מביאים את הטיפוס Task
-import type { Task } from "../App"
-
-// Props שמגיעים מהקומפוננטה App
 type Props = {
-  tasks: Task[] // רשימת המשימות
-  onToggle: (id: number) => void // שינוי מצב completed
-  onDelete: (id: number) => void // מחיקת משימה
-  onUpdate: (id: number, title: string, description?: string) => void // עדכון משימה (description אופציונלי)
+  tasks: Task[]
+  isLoading: boolean // הוספנו את ה־loading
+  onToggle: (id: number) => void
+  onDelete: (id: number) => void
+  onUpdate: (id: number, title: string, description?: string) => void
 }
 
-// קומפוננטה שמציגה את כל המשימות
-export default function TaskList({ tasks, onToggle, onDelete, onUpdate }: Props) {
+export default function TaskList({ tasks, isLoading, onToggle, onDelete, onUpdate }: Props) {
+  if (isLoading) return <p>Loading...</p>  // הצגת Loading אם עדיין נטען
+
   return (
     <div className="task-list">
-
-      {/* עוברים על כל המשימות עם map */}
       {tasks.map(task => (
-
         <TaskItem
-          key={task.id} // חשוב ל־React כדי לזהות כל אלמנט
-
-          task={task} // המשימה עצמה
-
-          // פונקציה לשינוי completed
+          key={task.id}
+          task={task}
           onToggle={() => onToggle(task.id)}
-
-          // פונקציה למחיקה
           onDelete={() => onDelete(task.id)}
-
-          // פונקציה לעדכון
-          onUpdate={(title, description) =>
-            onUpdate(task.id, title, description)
-          }
-
-          isLoading={false} // אפשר להרחיב בעתיד
-          isError={false}   // אפשר להרחיב בעתיד
+          onUpdate={(title, description) => onUpdate(task.id, title, description)}
+          isLoading={false} 
+          isError={false} 
         />
-
       ))}
-
     </div>
   )
 }
